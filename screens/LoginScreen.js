@@ -13,14 +13,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { RFValue } from "react-native-responsive-fontsize";
 import * as Google from "expo-google-app-auth";
 import firebase from "firebase";
-
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 
 let customFonts = {
   "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf")
 };
-
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -37,14 +35,13 @@ export default class LoginScreen extends Component {
   componentDidMount() {
     this._loadFontsAsync();
   }
-
   isUserEqual = (googleUser, firebaseUser) => {
     if (firebaseUser) {
       var providerData = firebaseUser.providerData;
       for (var i = 0; i < providerData.length; i++) {
         if (
           providerData[i].providerId ===
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
           providerData[i].uid === googleUser.getBasicProfile().getId()
         ) {
           // We don't need to reauth the Firebase connection.
@@ -71,7 +68,7 @@ export default class LoginScreen extends Component {
         firebase
           .auth()
           .signInWithCredential(credential)
-          .then(function (result) {
+          .then(function(result) {
             if (result.additionalUserInfo.isNewUser) {
               firebase
                 .database()
@@ -84,7 +81,7 @@ export default class LoginScreen extends Component {
                   last_name: result.additionalUserInfo.profile.family_name,
                   current_theme: "dark"
                 })
-                .then(function (snapshot) { });
+                .then(function(snapshot) {});
             }
           })
           .catch(error => {
@@ -110,7 +107,7 @@ export default class LoginScreen extends Component {
         androidClientId:
           "72696421845-lqe44rrjuiggsegp1uv4gklv34tvl3gc.apps.googleusercontent.com",
         iosClientId:
-          "72696421845-osrvc36bjie4264j4c0812sp5a2egqhj.apps.googleusercontent.com",
+          "420457763862-a8lrrgdh1e301023ndj0jgg7uhkemkvm.apps.googleusercontent.com",
         scopes: ["profile", "email"]
       });
 
@@ -130,15 +127,15 @@ export default class LoginScreen extends Component {
     if (!this.state.fontsLoaded) {
       return <AppLoading />;
     } else {
-      return (
-        <View style={styles.container}>
-          <SafeAreaView style={styles.droidSafeArea} />
-          <View style={styles.appTitle}>
-            <Image
-              source={require("../assets/logo.png")}
-              style={styles.appIcon}
-            ></Image>
-            <Text style={styles.appTitleText}>{`Storytelling\nApp`}</Text>
+    return (
+      <View style={styles.container}>
+        <SafeAreaView style={styles.droidSafeArea}/>
+        <View style={styles.appTitle}>
+          <Image style={styles.appIcon}
+          source={require("../assets/logo.png")}>
+
+          </Image>
+          <Text style={styles.appTitleText}>{`Storytelling\nApp`}</Text>
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -158,10 +155,10 @@ export default class LoginScreen extends Component {
               style={styles.cloudImage}
             ></Image>
           </View>
-        </View>
-      );
-    }
+      </View>
+    );
   }
+}
 }
 
 const styles = StyleSheet.create({

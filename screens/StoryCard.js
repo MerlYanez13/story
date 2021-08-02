@@ -25,10 +25,25 @@ export default class StoryCard extends Component {
     super(props);
     this.state = {
       fontsLoaded: false,
-      light_theme: true
+      light_theme: true,
+      story_id:this.props.story.key,
+      story_data:this.props.story.value,
+      isLike:false,
+      likes:this.props.story.value.likes
     };
   }
-
+  likeAction=()=>{
+    if(this.state.isLike)
+    {
+      firebase.database().ref("posts").child(this.state.story_id).child("likes").set(firebase.database.ServerValue.increment(-1))
+      this.setState({likes:this.state.likes-1,isLike:false})
+    }
+    else
+    {
+      firebase.database().ref("posts").child(this.state.story_id).child("likes").set(firebase.database.ServerValue.increment(1))
+      this.setState({likes:this.state.likes+1,isLike:true})
+    }
+  }
   async _loadFontsAsync() {
     await Font.loadAsync(customFonts);
     this.setState({ fontsLoaded: true });
@@ -106,7 +121,8 @@ export default class StoryCard extends Component {
             </View>
 
             <View style={styles.actionContainer}>
-              <View style={styles.likeButton}>
+              <TouchableOpacity style={styles.likeButton} onPress={()=>this.likeAction()}
+              style={this.state.isLike?styles.likeButtonLiked:styles.likeButtonDislike}> 
                 <Ionicons
                   name={"heart"}
                   size={RFValue(30)}
@@ -121,7 +137,7 @@ export default class StoryCard extends Component {
                 >
                   12k
                 </Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </TouchableOpacity>
@@ -207,13 +223,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: RFValue(10)
   },
-  likeButton: {
+  likeButtonLiked: {
     width: RFValue(160),
     height: RFValue(40),
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     backgroundColor: "#eb3948",
+    borderRadius: RFValue(30)
+  },
+  likeButtonDislike: {
+    width: RFValue(160),
+    height: RFValue(40),
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    backgroundColor: "white",
     borderRadius: RFValue(30)
   },
   likeText: {
